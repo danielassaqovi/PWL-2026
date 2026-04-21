@@ -10,13 +10,17 @@ return new class extends Migration
     {
         Schema::create('m_user', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('user_id');
-            $table->unsignedInteger('level_id');
+            $table->integer('user_id', true, true);
+            $table->integer('level_id')->unsigned();
             $table->string('username', 20)->unique();
             $table->string('nama', 100);
             $table->string('password', 255);
 
-            $table->foreign('level_id')->references('level_id')->on('m_level');
+            $table->foreign('level_id')
+                  ->references('level_id')
+                  ->on('m_level')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 

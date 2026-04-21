@@ -10,14 +10,18 @@ return new class extends Migration
     {
         Schema::create('m_barang', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('barang_id');
-            $table->unsignedInteger('kategori_id');
+            $table->integer('barang_id', true, true);
+            $table->integer('kategori_id')->unsigned();
             $table->string('barang_kode', 10)->unique();
             $table->string('barang_nama', 100);
             $table->integer('harga_beli');
             $table->integer('harga_jual');
 
-            $table->foreign('kategori_id')->references('kategori_id')->on('m_kategori');
+            $table->foreign('kategori_id')
+                  ->references('kategori_id')
+                  ->on('m_kategori')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 
