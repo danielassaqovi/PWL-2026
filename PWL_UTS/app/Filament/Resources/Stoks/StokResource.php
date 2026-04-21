@@ -7,8 +7,8 @@ use App\Filament\Resources\Stoks\Pages\EditStok;
 use App\Filament\Resources\Stoks\Pages\ListStoks;
 use App\Models\Stok;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -16,15 +16,15 @@ class StokResource extends Resource
 {
     protected static ?string $model = Stok::class;
 
-    protected static ?string $navigationGroup = 'Transaksi';
-    protected static ?string $navigationIcon  = 'heroicon-o-archive-box';
-    protected static ?int    $navigationSort  = 1;
-    protected static ?string $modelLabel      = 'Stok Barang';
+    protected static string | \UnitEnum | null $navigationGroup = 'Transaksi';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-archive-box';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $modelLabel = 'Stok Barang';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\Select::make('supplier_id')
                     ->label('Supplier')
                     ->relationship('supplier', 'supplier_nama')
