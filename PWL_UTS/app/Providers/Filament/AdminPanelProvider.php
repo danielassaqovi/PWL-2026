@@ -28,8 +28,13 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('PoS PWL UTS')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Indigo,
+            ])
+            ->navigationGroups([
+                \Filament\Navigation\NavigationGroup::make('Master Data')->icon('heroicon-o-circle-stack'),
+                \Filament\Navigation\NavigationGroup::make('Transaksi')->icon('heroicon-o-banknotes'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -38,8 +43,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                \App\Filament\Widgets\StatsOverview::class,
+                \App\Filament\Widgets\PenjualanChart::class,
+                \App\Filament\Widgets\TransaksiTerbaru::class,
             ])
             ->middleware([
                 EncryptCookies::class,
