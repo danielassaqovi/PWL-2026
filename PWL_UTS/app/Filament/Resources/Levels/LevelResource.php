@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Levels;
 use App\Filament\Resources\Levels\Pages;
 use App\Models\Level;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -14,15 +14,15 @@ class LevelResource extends Resource
 {
     protected static ?string $model = Level::class;
 
-    protected static ?string $navigationGroup = 'Master Data';
-    protected static ?string $navigationIcon  = 'heroicon-o-shield-check';
-    protected static ?int    $navigationSort  = 1;
-    protected static ?string $modelLabel      = 'Level Pengguna';
+    protected static string | \UnitEnum | null $navigationGroup = 'Master Data';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shield-check';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $modelLabel = 'Level Pengguna';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\TextInput::make('level_kode')
                     ->label('Kode Level')
                     ->required()
