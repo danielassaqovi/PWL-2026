@@ -6,7 +6,7 @@ use Filament\Widgets\ChartWidget;
 
 class PenjualanChart extends ChartWidget
 {
-    protected static ?string $heading = 'Grafik Penjualan 7 Hari Terakhir';
+    protected ?string $heading = 'Grafik Penjualan 7 Hari Terakhir';
 
     protected function getData(): array
     {
