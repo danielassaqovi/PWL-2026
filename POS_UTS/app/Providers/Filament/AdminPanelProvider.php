@@ -7,6 +7,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -34,6 +35,13 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#6366F1',
             ])
             ->darkMode(true)
+            ->navigationItems([
+                NavigationItem::make('Buka Kasir')
+                    ->url('/pos', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-computer-desktop')
+                    ->group('Transaksi')
+                    ->sort(1),
+            ])
             ->navigationGroups([
                 'Master Data',
                 'Transaksi',

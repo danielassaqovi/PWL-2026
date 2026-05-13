@@ -9,7 +9,7 @@ class TStok extends Model
 {
     protected $table = 't_stok';
     protected $primaryKey = 'stok_id';
-    protected $fillable = ['supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah'];
+    protected $fillable = ['supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah', 'keterangan', 'catatan_tambahan'];
 
     public function supplier(): BelongsTo
     {

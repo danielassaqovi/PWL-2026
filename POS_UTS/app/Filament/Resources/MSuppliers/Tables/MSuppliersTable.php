@@ -37,7 +37,7 @@ class MSuppliersTable
                 //
             ])
             ->actions([
-                ViewAction::make(),
+                // ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])

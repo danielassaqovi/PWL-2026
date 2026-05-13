@@ -2,13 +2,8 @@
 
 namespace App\Filament\Resources\MLevels\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Table;
-
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 
 class MLevelsTable
 {
@@ -33,11 +28,11 @@ class MLevelsTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                \Filament\Actions\EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -38,7 +38,7 @@ class TPenjualanInfolist
                             ->schema([
                                 RepeatableEntry::make('detail')
                                     ->schema([
-                                        Grid::make(5)
+                                        Grid::make(6)
                                             ->schema([
                                                 TextEntry::make('barang.barang_kode')
                                                     ->label('Kode'),
@@ -54,6 +54,34 @@ class TPenjualanInfolist
                                                     ->money('IDR', locale: 'id')
                                                     ->weight('bold')
                                                     ->label('Subtotal'),
+                                                TextEntry::make('sisa_stok')
+                                                    ->state(function ($record) {
+                                                        $barangId = $record->barang_id;
+                                                        $penjualanTanggal = $record->penjualan->penjualan_tanggal;
+                                                        $penjualanId = $record->penjualan_id;
+
+                                                        // Sum all stock IN until this sale date
+                                                        $stokMasuk = \App\Models\TStok::where('barang_id', $barangId)
+                                                            ->where('stok_tanggal', '<=', $penjualanTanggal)
+                                                            ->sum('stok_jumlah');
+
+                                                        // Sum all sales OUT until this sale date/id
+                                                        // We use both date and ID to ensure a stable ordering if dates are identical
+                                                        $stokKeluar = \App\Models\TPenjualanDetail::where('barang_id', $barangId)
+                                                            ->whereHas('penjualan', function ($query) use ($penjualanTanggal, $penjualanId) {
+                                                                $query->where('penjualan_tanggal', '<', $penjualanTanggal)
+                                                                    ->orWhere(function ($q) use ($penjualanTanggal, $penjualanId) {
+                                                                        $q->where('penjualan_tanggal', $penjualanTanggal)
+                                                                          ->where('penjualan_id', '<=', $penjualanId);
+                                                                    });
+                                                            })
+                                                            ->sum('jumlah');
+
+                                                        return ($stokMasuk - $stokKeluar) . ' unit';
+                                                    })
+                                                    ->color('danger')
+                                                    ->weight('bold')
+                                                    ->label('Sisa Stok'),
                                             ]),
                                     ])
                                     ->label('Item Terjual'),

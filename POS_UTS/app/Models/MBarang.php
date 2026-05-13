@@ -31,6 +31,18 @@ class MBarang extends Model
         return $this->hasMany(TPenjualanDetail::class, 'barang_id', 'barang_id');
     }
 
+    protected function totalStok(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $stokMasuk = $this->stok()->sum('stok_jumlah');
+                // Hitung semua penjualan termasuk yang sudah di-soft delete agar stok tidak bertambah kembali
+                $stokKeluar = $this->penjualan_detail()->withTrashed()->sum('jumlah');
+                return $stokMasuk - $stokKeluar;
+            }
+        );
+    }
+
     protected function hargaBeliFormatted(): Attribute
     {
         return Attribute::make(

@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources\MKategoris\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Table;
-
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Notifications\Notification;
+use App\Models\MKategori;
 
 class MKategorisTable
 {
@@ -31,17 +30,34 @@ class MKategorisTable
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
-                EditAction::make(),
+                \Filament\Actions\EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make()
+                        ->before(function (\Filament\Actions\DeleteBulkAction $action, $records) {
+                            foreach ($records as $record) {
+                                if ($record->barang()->exists()) {
+                                    Notification::make()
+                                        ->danger()
+                                        ->title('Gagal menghapus beberapa data!')
+                                        ->body("Kategori '{$record->kategori_nama}' masih memiliki barang terkait.")
+                                        ->send();
+                                    
+                                    $action->halt();
+                                    return;
+                                }
+                            }
+                        }),
+                    \Filament\Actions\RestoreBulkAction::make(),
+                    \Filament\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }

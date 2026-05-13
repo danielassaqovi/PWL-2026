@@ -16,7 +16,7 @@ class StockChartWidget extends ChartWidget
         $data = DB::table('t_stok')
             ->select(
                 DB::raw('DATE(stok_tanggal) as date'),
-                DB::raw('SUM(stok_jumlah) as total_stock')
+                DB::raw('SUM(stok_jumlah) as total')
             )
             ->where('stok_tanggal', '>=', now()->subDays(30))
             ->groupBy('date')
@@ -27,8 +27,8 @@ class StockChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Units Added',
-                    'data' => $data->pluck('total_stock')->toArray(),
-                    'backgroundColor' => '#10b981',
+                    'data' => $data->pluck('total')->toArray(),
+                    'backgroundColor' => '#fbbf24',
                 ],
             ],
             'labels' => $data->pluck('date')->map(fn ($date) => Carbon::parse($date)->format('M d'))->toArray(),

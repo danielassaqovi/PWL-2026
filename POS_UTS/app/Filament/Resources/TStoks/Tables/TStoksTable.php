@@ -2,11 +2,7 @@
 
 namespace App\Filament\Resources\TStoks\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Table;
-
 use Filament\Tables\Columns\TextColumn;
 
 class TStoksTable
@@ -19,12 +15,13 @@ class TStoksTable
                     ->label('Tanggal')
                     ->dateTime()
                     ->sortable(),
-                TextColumn::make('supplier.supplier_nama')
-                    ->label('Supplier')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('barang.barang_nama')
                     ->label('Barang')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('supplier.supplier_nama')
+                    ->label('Supplier')
+                    ->placeholder('Internal')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('stok_jumlah')
@@ -33,19 +30,23 @@ class TStoksTable
                     ->sortable()
                     ->badge()
                     ->color(fn ($state) => $state > 0 ? 'success' : 'danger'),
+                TextColumn::make('keterangan')
+                    ->label('Alasan/Ket')
+                    ->placeholder('Masok Barang')
+                    ->searchable(),
                 TextColumn::make('user.nama')
-                    ->label('Oleh')
+                    ->label('Petugas')
                     ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                \Filament\Actions\EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
